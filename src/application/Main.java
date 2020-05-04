@@ -16,9 +16,7 @@ public class Main extends Application {
 			ScrollPane scrollPane = loader.load();
 			scrollPane.setFitToHeight(true);		// set o scrollPane para
 			scrollPane.setFitToWidth(true);			// ajusta a janela. 
-			
-		 // cria a cena passando o scrooPane com argumento.	
-			Scene mainScene = new Scene(scrollPane);
+			Scene mainScene = new Scene(scrollPane); // cria a cena passando o scrooPane com argumento.
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Sample JavaFX application");
 			primaryStage.show();
