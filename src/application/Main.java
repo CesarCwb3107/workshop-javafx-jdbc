@@ -9,6 +9,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	
+	private static Scene mainScene;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -16,7 +19,8 @@ public class Main extends Application {
 			ScrollPane scrollPane = loader.load();
 			scrollPane.setFitToHeight(true);		// set o scrollPane para
 			scrollPane.setFitToWidth(true);			// ajusta a janela. 
-			Scene mainScene = new Scene(scrollPane); // cria a cena passando o scrooPane com argumento.
+			
+			mainScene = new Scene(scrollPane); // cria a cena passando o scrooPane com argumento.
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Sample JavaFX application");
 			primaryStage.show();
@@ -24,7 +28,11 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
+// como a variavel e privada precisamos criar um metodo par retornar o mainscene
+	public static Scene getMainScene () {
+		return mainScene;
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
