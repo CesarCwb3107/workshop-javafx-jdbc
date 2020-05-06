@@ -33,7 +33,7 @@ public class MainViewController implements Initializable {
 
 	@FXML // metodos event handler para cada menu
 	public void onMenuItemDepartmentAction() {
-		System.out.println("onMenuItemDepartmentAction");
+		loadView("/gui/DepartmentList.fxml");
 	}
 	
 	public void onMenuItemAboutAction() {
