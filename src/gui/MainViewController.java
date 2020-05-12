@@ -15,17 +15,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartmentService;
 
 public class MainViewController implements Initializable {
-	
-	//Cria as variavel que serao linkadas ao menu item no scene builder
-	@FXML 
-	private MenuItem menuItemSeller; 	
+
+	// Cria as variavel que serao linkadas ao menu item no scene builder
+	@FXML
+	private MenuItem menuItemSeller;
 	@FXML
 	private MenuItem menuItemDepartment;
 	@FXML
 	private MenuItem menuItemAbout;
-	
+
 	@FXML
 	public void onMenuItemSellerAction() {
 		System.out.println("onMenuItemSellerAction()");
@@ -33,36 +34,65 @@ public class MainViewController implements Initializable {
 
 	@FXML // metodos event handler para cada menu
 	public void onMenuItemDepartmentAction() {
-		loadView("/gui/DepartmentList.fxml");
+		// metodo criado temporariamente.
+		loadView2("/gui/DepartmentList.fxml");
 	}
-	
+
 	public void onMenuItemAboutAction() {
 		loadView("/gui/About.fxml");
 	}
-	
+
 	@Override
 	public void initialize(URL uri, ResourceBundle rb) {
 	}
-	
-	private synchronized void loadView (String absoluteName) {
+
+	private synchronized void loadView(String absoluteName) {
 		try {
-		    FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-		    //Cria um objeto do tipo Vbox 
-		    VBox newVBox = loader.load();
-		    // como mostrar a view na janela principal
-		    Scene mainScene = Main.getMainScene();
-		    // pega o primeiro elemetno da minha view principal o scrollPane. getRoot
-		    // temos que fazer um casting do getroot para scrollPane
-		    
-		    VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-		    
-		    Node mainMenu = mainVBox.getChildren().get(0);
-		    mainVBox.getChildren().clear();
-		    mainVBox.getChildren().add(mainMenu);
-		    mainVBox.getChildren().addAll(newVBox.getChildren());
-		}
-		catch (IOException e) {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			// Cria um objeto do tipo Vbox
+			VBox newVBox = loader.load();
+			// como mostrar a view na janela principal
+			Scene mainScene = Main.getMainScene();
+			// pega o primeiro elemetno da minha view principal o scrollPane. getRoot
+			// temos que fazer um casting do getroot para scrollPane
+
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(newVBox.getChildren());
+		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Error Loading View", e.getMessage(), AlertType.ERROR);
 		}
 	}
+
+	// Metodo temporario loadview2
+
+	private synchronized void loadView2(String absoluteName) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			// Cria um objeto do tipo Vbox
+			VBox newVBox = loader.load();
+			// como mostrar a view na janela principal
+			Scene mainScene = Main.getMainScene();
+			// pega o primeiro elemetno da minha view principal o scrollPane. getRoot
+			// temos que fazer um casting do getroot para scrollPane
+
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(newVBox.getChildren());
+			// ----------------------------------------------------------
+			DepartmentListController controller = loader.getController();
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView();
+			
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Error Loading View", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
 }
