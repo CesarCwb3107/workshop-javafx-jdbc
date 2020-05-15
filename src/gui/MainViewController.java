@@ -62,7 +62,6 @@ public class MainViewController implements Initializable {
 		// pega o primeiro elemetno da minha view principal o scrollPane. getRoot
 		// temos que fazer um casting do getroot para scrollPane
 			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
 			Node mainMenu = mainVBox.getChildren().get(0);
 			mainVBox.getChildren().clear();
 			mainVBox.getChildren().add(mainMenu);
