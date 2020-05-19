@@ -9,6 +9,6 @@ public class Utils {
 		// Downcasting para Node.
 		// Window é uma super classe do Stage, tenho que fazer mais um
 		// Downcasting para stage.
-		return (Stage) ((Node)event.getSource()).getScene().getWindow();
+		return (Stage) ((Node) event.getSource()).getScene().getWindow();
 	}
 }
