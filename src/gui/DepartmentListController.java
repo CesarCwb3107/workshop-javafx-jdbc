@@ -28,7 +28,10 @@ import model.services.DepartmentService;
 
 public class DepartmentListController implements Initializable {
 	
-	//Criar referencias para os Componentes/controles no FXML Scene Buider.
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		initializeNodes();
+	}
 	
 	@FXML
 	private Button btNew;
@@ -36,7 +39,8 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj = new Department();
+		createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	@FXML
@@ -48,11 +52,6 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	private TableColumn<Department, String> tableColumnName;
 	
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		initializeNodes();
-		
-	}
 
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -91,10 +90,17 @@ public class DepartmentListController implements Initializable {
 		}
 		// Quando criamos uma janela de dialogo 
 		// precisamos infomar quem e o stage que crio a janela de dialogo
-		private void createDialogForm(String absoluteName, Stage parentStage) {
+		private void createDialogForm(Department obj, String absoluteName, Stage parentStage) {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 				Pane pane = loader.load();
+				
+				// pegar uma referencia para o controlador
+				
+				DepartmentFormController controller = loader.getController();
+				controller.setDepartment(obj);
+				controller.updateFormData();
+				
 				// um palco na frente do outro, temos que instanciar 
 				// outro stage
 				Stage dialogStage = new Stage();
