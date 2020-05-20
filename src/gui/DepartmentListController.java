@@ -66,7 +66,7 @@ public class DepartmentListController implements Initializable {
 		tableViewDepartment.prefHeightProperty().bind(stage.heightProperty());
 	}
 	
-	// Criar uma dependencia entre o controller o service
+	// Criar uma dependencia entre o controller service
 	// injetar uma dependencia sem ACOPLAMENTO FORTE com o DepartmentService
 	// private DepartmentService service = new DepartmentService();
 	// definir o metodo setDepartmentService(DepartmentService service)
@@ -99,6 +99,8 @@ public class DepartmentListController implements Initializable {
 				
 				DepartmentFormController controller = loader.getController();
 				controller.setDepartment(obj);
+				// Injetar o DepartmentService - Injecao de dependencia manual
+				controller.setDepartmentService(new DepartmentService());
 				controller.updateFormData();
 				
 				// um palco na frente do outro, temos que instanciar 

@@ -11,4 +11,14 @@ public class Utils {
 		// Downcasting para stage.
 		return (Stage) ((Node) event.getSource()).getScene().getWindow();
 	}
+	
+	// Converter o valor do txtField para inteiro.
+	public static Integer tryParseToInt(String str) {
+		try {
+			return Integer.parseInt(str);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
 }
