@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,11 +27,18 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeNodes();
+	}
+	// A classe DepartmentListController implementa a Interfaca 
+	// gui.listener.DataChangeListener. Quando houver uma alteração nos dados
+	// usamos o metodo onDataChanged() 
+	@Override
+	public void onDataChanged() {
+		updateTableView();
 	}
 	
 	@FXML
@@ -88,7 +96,7 @@ public class DepartmentListController implements Initializable {
 			obsList = FXCollections.observableArrayList(list);
 			tableViewDepartment.setItems(obsList);
 		}
-		// Quando criamos uma janela de dialogo 
+		// Quando criamos uma janela de dialogo .
 		// precisamos infomar quem e o stage que crio a janela de dialogo
 		private void createDialogForm(Department obj, String absoluteName, Stage parentStage) {
 			try {
@@ -99,12 +107,13 @@ public class DepartmentListController implements Initializable {
 				
 				DepartmentFormController controller = loader.getController();
 				controller.setDepartment(obj);
-				// Injetar o DepartmentService - Injecao de dependencia manual
+			// Injetar o DepartmentService - Injecao de dependencia manual
 				controller.setDepartmentService(new DepartmentService());
+			// Inscrever o DepartamentListController
+				controller.subscribeDataChangeListener(this);
 				controller.updateFormData();
-				
-				// um palco na frente do outro, temos que instanciar 
-				// outro stage
+			// um palco na frente do outro, temos que instanciar 
+			// outro stage
 				Stage dialogStage = new Stage();
 				dialogStage.setTitle("Enter Department Data");
 				dialogStage.setScene(new Scene(pane));

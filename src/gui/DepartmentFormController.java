@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
-
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -23,12 +25,17 @@ public class DepartmentFormController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
 	}
-
 	// Criar uma depencia com o objeto DepartmentService
 	private DepartmentService service;
 
 	// Criar uma depencia com o objeto Department
 	private Department entity;
+	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
 
 	@FXML
 	private TextField txtId;
@@ -47,23 +54,25 @@ public class DepartmentFormController implements Initializable {
 
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
-
-		// precisamos fazer este controle,
-		// por que estamos fazendo uma injecao de depencia manual
-		// por que nao estamos usando um container um framework
-
-		if (entity == null) {
-			throw new IllegalStateException("Entity was null");
-		}
+		if (entity == null) { // precisamos fazer este controle, ....
+			throw new IllegalStateException("Entity was null"); //Porque nao usamos 1container...
+		} //... um framework por que estamos fazendo uma injecao de depencia manual
 		if (service == null) {
 			throw new IllegalStateException("Service was null");
 		}
 		try {
 			entity = getFormData();
 			service.saveOrUpdate(entity);
+			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		} catch (DbException e) {
 			Alerts.showAlert("Error Saving Object", "Saving Department", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void notifyDataChangeListeners() {
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
 		}
 	}
 
@@ -99,5 +108,4 @@ public class DepartmentFormController implements Initializable {
 		txtId.setText(String.valueOf(entity.getId()));
 		txtName.setText(entity.getName());
 	}
-
 }
