@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,9 +35,6 @@ public class SellerListController implements Initializable, DataChangeListener {
 		initializeNodes();
 	}
 
-	// A classe SellerListController implementa a Interfaca
-	// gui.listener.DataChangeListener. Quando houver uma alteração nos dados
-	// usamos o metodo onDataChanged()
 	@Override
 	public void onDataChanged() {
 		updateTableView();
@@ -60,7 +58,16 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	@FXML
 	private TableColumn<Seller, String> tableColumnName;
-
+	
+	@FXML
+	private TableColumn<Seller, String> tableColumnEmail;
+	
+	@FXML
+	private TableColumn<Seller, Date> tableColumnBirthDate;
+	
+	@FXML
+	private TableColumn<Seller, Double> tableColumnBaseSalary;
+	
 	@FXML
 	TableColumn<Seller, Seller> tableColumnEDIT;
 
@@ -69,32 +76,23 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-		// Para a tableview acompanhar o tamanho da janela
-		// o getWindow pega uma refencia para a janela
-		// a Window é uma super classe do stage.
-		// entao para poder atribuir para o stage , temos que fazer um
-		// downcasting
+		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		// entao fazemos um bind do tableViewDep.. com o stage..
 		tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
 	}
 
-	// Criar uma dependencia entre o controller service
-	// injetar uma dependencia sem ACOPLAMENTO FORTE com o SellerService
-	// private SellerService service = new SellerService();
-	// definir o metodo setSellerService(SellerService service)
-
 	private SellerService service; // DepListService
-	// Para carrgar o tableview
 	private ObservableList<Seller> obsList; // DepListService
 
-	// Inversao de controle. DepListService
 	public void setSellerService(SellerService service) {
 		this.service = service;
 	}
 
-	// este metodo tera que ser chamado no mainview controller
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service was null");
